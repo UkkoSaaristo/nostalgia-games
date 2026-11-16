@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Каталог игр</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #101114;
+      color: #eeeef0;
+      font: 16px/1.5 system-ui, sans-serif;
+    }
+
+    .container {
+      width: min(100% - 32px, 960px);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 56px 0 0;
+      border-bottom: 1px solid #292b31;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(32px, 6vw, 48px);
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #a3a5af;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-top: 28px;
+    }
+
+    .tab {
+      padding: 12px 16px;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      color: #a3a5af;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .tab:hover {
+      color: #fff;
+    }
+
+    .tab[aria-selected="true"] {
+      border-bottom-color: #aeb8ff;
+      color: #fff;
+    }
+
+    .tab:focus-visible,
+    a:focus-visible {
+      outline: 2px solid #aeb8ff;
+      outline-offset: 3px;
+    }
+
+    main {
+      padding: 32px 0 64px;
+      min-height: 50vh;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #393c46;
+      border-radius: 10px;
+      background: #1a1c22;
+      color: #fff;
+      font: inherit;
+    }
+
+    input:focus {
+      outline: 2px solid #8f9eff;
+      outline-offset: 2px;
+    }
+
+    .count {
+      margin: 20px 0 16px;
+      color: #a3a5af;
+      font-size: 14px;
+    }
+
+    .catalog {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      border: 1px solid #292b31;
+      border-radius: 12px;
+      background: #181a1f;
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      overflow-wrap: anywhere;
+    }
+
+    .card p {
+      margin: 0 0 20px;
+      color: #a3a5af;
+      overflow-wrap: anywhere;
+    }
+
+    .card a {
+      align-self: flex-start;
+      margin-top: auto;
+      padding: 9px 14px;
+      border-radius: 8px;
+      background: #dfe3ff;
+      color: #171a2d;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .card a:hover {
+      background: #fff;
+    }
+
+    .unavailable {
+      margin-top: auto;
+      color: #a3a5af;
+      font-size: 14px;
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      padding: 24px 0;
+      color: #a3a5af;
+    }
+
+    .instruction {
+      max-width: 760px;
+    }
+
+    .instruction h2 {
+      margin-top: 0;
+    }
+
+    .instruction h3 {
+      margin-top: 32px;
+    }
+
+    .instruction p,
+    .instruction li {
+      color: #c7c8cf;
+    }
+
+    .instruction li {
+      margin-bottom: 10px;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #181a1f;
+    }
+
+    .video-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    footer {
+      padding: 24px 0;
+      border-top: 1px solid #292b31;
+      color: #a3a5af;
+      font-size: 14px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <h1>Каталог игр</h1>
+      <p class="subtitle">Старые игры в одном месте.</p>
+
+      <nav class="tabs" role="tablist" aria-label="Разделы сайта">
+        <button
+          class="tab"
+          id="catalog-tab"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-controls="catalog-panel"
+          tabindex="0"
+        >
+          Каталог
+        </button>
+
+        <button
+          class="tab"
+          id="instruction-tab"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="instruction-panel"
+          tabindex="-1"
+        >
+          Инструкция
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Вкладка «Каталог» -->
+    <section
+      id="catalog-panel"
+      role="tabpanel"
+      aria-labelledby="catalog-tab"
+    >
+      <label for="search">Поиск по названию</label>
+      <input
+        id="search"
+        type="search"
+        placeholder="Введите название игры"
+        autocomplete="off"
+      >
+
+      <p id="count" class="count" role="status"></p>
+      <div id="catalog" class="catalog"></div>
+    </section>
+
+    <!-- Вкладка «Инструкция»: замените текст ниже своим -->
+    <section
+      id="instruction-panel"
+      class="instruction"
+      role="tabpanel"
+      aria-labelledby="instruction-tab"
+      tabindex="0"
+      hidden
+    >
+      <h2>Инструкция</h2>
+
+      <h3>ЕСЛИ НА ДВУХ ДИСКАХ</h3>
+      <ol>
+        <li>Скачать архив с нужной игрой</li>
+        <li>Распаковать нужную игру себе на компьютер</li>
+        <li>Открыть папку с нужной игрой (например "Смерашики. Круглая компания")</li>
+        <li>На первый файл (disk 1) нажимаем правой кнопкой мыши</li>
+        <li>"Открыть с помощью" »»» "Проводник"</li>
+        <li>Нажимаем "Setup" и выполняем установку</li>
+        <li>После установки выбираем второй файл (желательно сначала извлечь первый файл через "мой компьютер")</li>
+        <li>Повторяем действия из пунктов "4" и "5" со вторым файлом </li>
+        <li>Включаем игру и наслаждаемся</li>
+      </ol>
+
+      <h4>ЕСЛИ НА ОДНОМ ДИСКЕ</h4>
+      <ol>
+        <li>Скачать архив с нужной игрой</li>
+        <li>Распаковать нужную игру себе на компьютер</li>
+        <li>Открыть папку с нужной игрой (например "Губка Боб")</li>
+        <li>На файл нажимаем правой кнопкой мыши</li>
+        <li>"Открыть с помощью" »»» "Проводник"</li>
+        <li>Нажимаем "Setup" и выполняем установку</li>
+        <li>Включаем игру и наслаждаемся</li>
+      </ol>
+
+      <p>
+        Если архив защищён паролем, укажите здесь, где его найти.
+      </p>
+
+      <!-- Этот блок появится, если указан корректный ID видео -->
+      <div id="video-section" hidden>
+        <h3>Видеоинструкция</h3>
+        <div class="video-wrapper">
+          <iframe
+            id="instruction-video"
+            title="Видеоинструкция"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      Каталог игр · файлы находятся на внешних облачных дисках
+    </div>
+  </footer>
+
+  <script>
+    // ==========================================
+    // НАСТРОЙКИ КАТАЛОГА
+    // ==========================================
+    // Замените примеры своими играми.
+    // Между объектами с играми нужна запятая.
+
+    const games = [
+      {
+        title: "Агент Лис 2",
+        description: "Агент Лис · Spy Fox · архив RAR",
+        url: "https://drive.google.com/file/d/1-kS9y4PnAKBAoniOO8_UySArp8COD_R-/view"
+      },
+      {
+        title: "Агент Лис Операция Озон",
+        description: "Агент Лис · Spy Fox · архив RAR",
+        url: "https://drive.google.com/file/d/1mU-JI-0e7gbGa7_RfG2DERPm9fpMQ78t/view"
+      },
+      {
+        title: "Барби в Нью-Йорке",
+        description: "Барби · Barbie · архив RAR",
+        url: "https://drive.google.com/file/d/1drcNyTiB2uwKZkVMnqz2MoUy1AeKkjXt/view"
+      },
+      {
+        title: "Барби покоряет Голливуд",
+        description: "Барби · Barbie · архив RAR",
+        url: "https://drive.google.com/file/d/1-pUCO19TMzp23bjkrFn-QEXEVu-ddSvI/view"
+      },
+      {
+        title: "Барби спортивная гимнастика",
+        description: "Барби · Barbie · архив RAR",
+        url: "https://drive.google.com/file/d/1eYSu_zQ5LMAK0RFDk2YLlXgQP7eZm24R/view"
+      },
+      {
+        title: "Барби Школьная тайна",
+        description: "Барби · Barbie · архив RAR",
+        url: "https://drive.google.com/file/d/1PCDaMhIbKM6BnmfPN_r91nPVz8GKUkEq/view"
+      },
+      {
+        title: "Бумер",
+        description: "Бумер · архив RAR",
+        url: "https://drive.google.com/file/d/1lxqOiX4-Cj8uieblQYVXr-oVGM8VNkAn/view"
+      },
+      {
+        title: "В поисках Немо",
+        description: "Finding Nemo · архив RAR",
+        url: "https://drive.google.com/file/d/1vMEEm0PmzRTxWYoOFsmCgRiaOIdN9N-5/view"
+      },
+      {
+        title: "Вверх",
+        description: "UP · архив RAR",
+        url: "https://drive.google.com/file/d/1sgdnR1cEKHWawJ-t1sUshjQI5vdaYEuI/view"
+      },
+      {
+        title: "Винкс",
+        description: "Winx · архив RAR",
+        url: "https://drive.google.com/file/d/1NvuLfQln5gDaN0Qcz700gabmZ35e3zJo/view"
+      },
+      {
+        title: "Валли",
+        description: "Walle · архив RAR",
+        url: "https://drive.google.com/file/d/1k2fzt9gcdIT1NT4jqBfvkfUyIVB5tpdm/view"
+      },
+      {
+        title: "Гарфилд",
+        description: "Garfield · архив RAR",
+        url: "https://drive.google.com/file/d/17QWQVPLQ7QTtVUiL4L6r7sPzxQp1ksRj/view"
+      },
+      {
+        title: "Гарфилд. Все без ума от кошек",
+        description: "Garfield's Mad About Cats · архив RAR",
+        url: "https://drive.google.com/file/d/1rQZzpNR9_jQ006e5y0ON5KE4vM0my8HE/view"
+      },
+      {
+        title: "Губка Боб (по фильму 2004)",
+        description: "The SpongeBob SquarePants Movie · архив RAR",
+        url: "https://drive.google.com/file/d/1dTXiZQlTjOeljqNYlpsKQHTmuhxoEGB6/view"
+      },
+      {
+        title: "Губка Боб Битва за Бикини Боттом",
+        description: "SpongeBob SquarePants: Battle for Bikini Bottom · архив RAR",
+        url: "https://drive.google.com/file/d/1F2f1s61UBOeErMbrqqWuCI831pOgCA_s/view"
+      },
+      {
+        title: "Губка Боб Страсти Мордасти",
+        description: "SpongeBob SquarePants: Nighty Nightmare · архив RAR",
+        url: "https://drive.google.com/file/d/1GmygUWtTBKaM9DhEzqQm9ZRxGAjIxWOr/view"
+      },
+      {
+        title: "Губка Боб Работник Месяца (1С)",
+        description: "SpongeBob SquarePants: Employee of the Month · архив RAR",
+        url: "https://drive.google.com/file/d/18u26D82hSwS00WmpPrPYgwJE_yEQ3oXT/view"
+      },
+      {
+        title: "Губка Боб Работник Месяца (Триада)",
+        description: "SpongeBob SquarePants: Employee of the Month · архив RAR",
+        url: "https://drive.google.com/file/d/1hmQnf18gg0mksdZDIo-633dwhKMx3bVx/view"
+      },
+      {
+        title: "Губка Боб Свет Камера Штаны",
+        description: "SpongeBob SquarePants: Lights, Camera, Pants · архив RAR",
+        url: "https://drive.google.com/file/d/1KOJtXs31ZQj5VzAFJTq8JQYxCYSWz8z1/view"
+      },
+    ];
+
+    // ==========================================
+    // НАСТРОЙКА ВИДЕОИНСТРУКЦИИ
+    // ==========================================
+    // Вставьте только ID видео с YouTube, например:
+    // const driveVideoId = "1veEuLGNM16zg-s0k0jIZR0oai4cfUO4H";
+    // Если видео пока нет, оставьте пустые кавычки.
+
+    const driveVideoId = "1veEuLGNM16zg-s0k0jIZR0oai4cfUO4H";
+
+    // ==========================================
+    // КОД САЙТА
+    // ==========================================
+
+    const search = document.getElementById("search");
+    const catalog = document.getElementById("catalog");
+    const count = document.getElementById("count");
+
+    // Разрешённые адреса облачных сервисов.
+    const allowedHosts = {
+      "drive.google.com": "Google Диске",
+      "disk.yandex.ru": "Яндекс Диске",
+      "disk.yandex.com": "Яндекс Диске",
+      "disk.yandex.by": "Яндекс Диске",
+      "disk.yandex.kz": "Яндекс Диске",
+      "yadi.sk": "Яндекс Диске",
+      "mega.nz": "MEGA",
+      "mega.io": "MEGA"
+    };
+
+    function getServiceName(value) {
+      try {
+        const url = new URL(value);
+
+        if (url.protocol !== "https:") {
+          return null;
+        }
+
+        if (!Object.hasOwn(allowedHosts, url.hostname)) {
+          return null;
+        }
+
+        return allowedHosts[url.hostname];
+      } catch {
+        return null;
+      }
+    }
+
+    function renderCatalog() {
+      const query = search.value.trim().toLocaleLowerCase("ru");
+
+      const filtered = games.filter(game =>
+        game.title.toLocaleLowerCase("ru").includes(query)
+      );
+
+      catalog.replaceChildren();
+      count.textContent = `Найдено: ${filtered.length}`;
+
+      if (filtered.length === 0) {
+        const message = document.createElement("p");
+        message.className = "empty";
+        message.textContent = "Ничего не найдено. Попробуйте другой запрос.";
+        catalog.append(message);
+        return;
+      }
+
+      filtered.forEach(game => {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const title = document.createElement("h2");
+        title.textContent = game.title;
+
+        const description = document.createElement("p");
+        description.textContent = game.description;
+
+        card.append(title, description);
+
+        const serviceName = getServiceName(game.url);
+
+        if (serviceName) {
+          const link = document.createElement("a");
+          link.href = game.url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = `Открыть на ${serviceName} ↗`;
+          link.setAttribute(
+            "aria-label",
+            `Открыть ${game.title} на ${serviceName}`
+          );
+          card.append(link);
+        } else {
+          const unavailable = document.createElement("span");
+          unavailable.className = "unavailable";
+          unavailable.textContent = "Ссылка пока недоступна";
+          card.append(unavailable);
+        }
+
+        catalog.append(card);
+      });
+    }
+
+    search.addEventListener("input", renderCatalog);
+    renderCatalog();
+
+    // Переключение вкладок.
+    const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+
+    function activateTab(selectedTab) {
+      tabs.forEach(tab => {
+        const selected = tab === selectedTab;
+        const panel = document.getElementById(
+          tab.getAttribute("aria-controls")
+        );
+
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        panel.hidden = !selected;
+      });
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => activateTab(tab));
+
+      // Управление стрелками для пользователей клавиатуры.
+      tab.addEventListener("keydown", event => {
+        let nextIndex;
+
+        if (event.key === "ArrowRight") {
+          nextIndex = (index + 1) % tabs.length;
+        } else if (event.key === "ArrowLeft") {
+          nextIndex = (index - 1 + tabs.length) % tabs.length;
+        } else if (event.key === "Home") {
+          nextIndex = 0;
+        } else if (event.key === "End") {
+          nextIndex = tabs.length - 1;
+        } else {
+          return;
+        }
+
+        event.preventDefault();
+        activateTab(tabs[nextIndex]);
+        tabs[nextIndex].focus();
+      });
+    });
+
+    // Встраивание видео с Google Диска.
+if (/^[A-Za-z0-9_-]+$/.test(driveVideoId)) {
+  const videoSection = document.getElementById("video-section");
+  const video = document.getElementById("instruction-video");
+
+  video.src = `https://drive.google.com/file/d/${driveVideoId}/preview`;
+  videoSection.hidden = false;
+}
+  </script>
+</body>
+</html>
