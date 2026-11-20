@@ -293,10 +293,6 @@
         <li>Включаем игру и наслаждаемся</li>
       </ol>
 
-      <p>
-        Если архив защищён паролем, укажите здесь, где его найти.
-      </p>
-
       <!-- Этот блок появится, если указан корректный ID видео -->
       <div id="video-section" hidden>
         <h3>Видеоинструкция</h3>
@@ -330,32 +326,32 @@
     const games = [
       {
         title: "Агент Лис 2",
-        description: "Агент Лис · Spy Fox · архив RAR",
+        description: "Агент Лис · архив RAR",
         url: "https://drive.google.com/file/d/1-kS9y4PnAKBAoniOO8_UySArp8COD_R-/view"
       },
       {
         title: "Агент Лис Операция Озон",
-        description: "Агент Лис · Spy Fox · архив RAR",
+        description: "Агент Лис · архив RAR",
         url: "https://drive.google.com/file/d/1mU-JI-0e7gbGa7_RfG2DERPm9fpMQ78t/view"
       },
       {
         title: "Барби в Нью-Йорке",
-        description: "Барби · Barbie · архив RAR",
+        description: "Барби · архив RAR",
         url: "https://drive.google.com/file/d/1drcNyTiB2uwKZkVMnqz2MoUy1AeKkjXt/view"
       },
       {
         title: "Барби покоряет Голливуд",
-        description: "Барби · Barbie · архив RAR",
+        description: "Барби · архив RAR",
         url: "https://drive.google.com/file/d/1-pUCO19TMzp23bjkrFn-QEXEVu-ddSvI/view"
       },
       {
         title: "Барби спортивная гимнастика",
-        description: "Барби · Barbie · архив RAR",
+        description: "Барби · архив RAR",
         url: "https://drive.google.com/file/d/1eYSu_zQ5LMAK0RFDk2YLlXgQP7eZm24R/view"
       },
       {
         title: "Барби Школьная тайна",
-        description: "Барби · Barbie · архив RAR",
+        description: "Барби · архив RAR",
         url: "https://drive.google.com/file/d/1PCDaMhIbKM6BnmfPN_r91nPVz8GKUkEq/view"
       },
       {
@@ -365,22 +361,22 @@
       },
       {
         title: "В поисках Немо",
-        description: "Finding Nemo · архив RAR",
+        description: "Немо · архив RAR",
         url: "https://drive.google.com/file/d/1vMEEm0PmzRTxWYoOFsmCgRiaOIdN9N-5/view"
       },
       {
         title: "Вверх",
-        description: "UP · архив RAR",
+        description: "Вверх · архив RAR",
         url: "https://drive.google.com/file/d/1sgdnR1cEKHWawJ-t1sUshjQI5vdaYEuI/view"
       },
       {
         title: "Винкс",
-        description: "Winx · архив RAR",
+        description: "Винкс · архив RAR",
         url: "https://drive.google.com/file/d/1NvuLfQln5gDaN0Qcz700gabmZ35e3zJo/view"
       },
       {
         title: "Валли",
-        description: "Walle · архив RAR",
+        description: "Валли · архив RAR",
         url: "https://drive.google.com/file/d/1k2fzt9gcdIT1NT4jqBfvkfUyIVB5tpdm/view"
       },
       {
@@ -390,37 +386,37 @@
       },
       {
         title: "Гарфилд. Все без ума от кошек",
-        description: "Garfield's Mad About Cats · архив RAR",
+        description: "Garfield · архив RAR",
         url: "https://drive.google.com/file/d/1rQZzpNR9_jQ006e5y0ON5KE4vM0my8HE/view"
       },
       {
         title: "Губка Боб (по фильму 2004)",
-        description: "The SpongeBob SquarePants Movie · архив RAR",
+        description: "Губка Боб · архив RAR",
         url: "https://drive.google.com/file/d/1dTXiZQlTjOeljqNYlpsKQHTmuhxoEGB6/view"
       },
       {
         title: "Губка Боб Битва за Бикини Боттом",
-        description: "SpongeBob SquarePants: Battle for Bikini Bottom · архив RAR",
+        description: "Губка Боб · архив RAR",
         url: "https://drive.google.com/file/d/1F2f1s61UBOeErMbrqqWuCI831pOgCA_s/view"
       },
       {
         title: "Губка Боб Страсти Мордасти",
-        description: "SpongeBob SquarePants: Nighty Nightmare · архив RAR",
+        description: "Губка Боб · архив RAR",
         url: "https://drive.google.com/file/d/1GmygUWtTBKaM9DhEzqQm9ZRxGAjIxWOr/view"
       },
       {
         title: "Губка Боб Работник Месяца (1С)",
-        description: "SpongeBob SquarePants: Employee of the Month · архив RAR",
+        description: "Губка Боб · архив RAR",
         url: "https://drive.google.com/file/d/18u26D82hSwS00WmpPrPYgwJE_yEQ3oXT/view"
       },
       {
         title: "Губка Боб Работник Месяца (Триада)",
-        description: "SpongeBob SquarePants: Employee of the Month · архив RAR",
+        description: "Губка Боб · архив RAR",
         url: "https://drive.google.com/file/d/1hmQnf18gg0mksdZDIo-633dwhKMx3bVx/view"
       },
       {
         title: "Губка Боб Свет Камера Штаны",
-        description: "SpongeBob SquarePants: Lights, Camera, Pants · архив RAR",
+        description: "Губка Боб · архив RAR",
         url: "https://drive.google.com/file/d/1KOJtXs31ZQj5VzAFJTq8JQYxCYSWz8z1/view"
       },
       {
